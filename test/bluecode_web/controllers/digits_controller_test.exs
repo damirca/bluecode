@@ -1,7 +1,11 @@
 defmodule BluecodeWeb.DigitsControllerTest do
   use BluecodeWeb.ConnCase
 
+  alias Bluecode.DigitsHandler
+
   setup %{conn: conn} do
+    DigitsHandler.clear()
+
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
@@ -28,7 +32,7 @@ defmodule BluecodeWeb.DigitsControllerTest do
 
   describe "checksum" do
     setup do
-      Bluecode.DigitsHandler.store([1, 2, 3])
+      DigitsHandler.store([1, 2, 3])
 
       :ok
     end

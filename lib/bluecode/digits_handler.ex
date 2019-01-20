@@ -3,11 +3,7 @@ defmodule Bluecode.DigitsHandler do
   require Integer
 
   def start_link(_opts) do
-    GenServer.start_link(__MODULE__, :ok, name: :digits_handler)
-  end
-
-  def init(:ok) do
-    {:ok, []}
+    GenServer.start_link(__MODULE__, [], name: :digits_handler)
   end
 
   def store(digits) do
