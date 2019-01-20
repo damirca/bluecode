@@ -11,6 +11,7 @@ defmodule BluecodeWeb.DigitsController do
         |> render("digits.json", digits: digits)
       {:error, :invalid_input} ->
         conn
+        |> put_resp_header("content-type", "application/json")
         |> send_resp(422, build_json_error("Invalid input"))
     end
   end
