@@ -3,7 +3,7 @@ defmodule BluecodeWeb.DigitsController do
 
   alias Bluecode.DigitsHandler
 
-  def create(conn, %{"digits" => digits}) when is_list(digits) do
+  def create(conn, %{"digits" => digits}) when is_binary(digits) do
     case DigitsHandler.store(digits) do
       {:ok, digits} ->
         conn

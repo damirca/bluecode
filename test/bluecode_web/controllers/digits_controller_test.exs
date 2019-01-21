@@ -11,13 +11,13 @@ defmodule BluecodeWeb.DigitsControllerTest do
 
   describe "create" do
     test "stores new digits", %{conn: conn} do
-      conn = post(conn, Routes.digits_path(conn, :create), digits: [1, 2, 3])
+      conn = post(conn, Routes.digits_path(conn, :create), digits: "123")
 
       assert json_response(conn, 201)["digits"] == [1, 2, 3]
     end
 
     test "returns a proper error when input is invalid", %{conn: conn} do
-      conn = post(conn, Routes.digits_path(conn, :create), digits: [1, "foo", 3])
+      conn = post(conn, Routes.digits_path(conn, :create), digits: "1foo3")
 
       assert json_response(conn, 422)["error"] == "Invalid input"
     end
@@ -32,7 +32,7 @@ defmodule BluecodeWeb.DigitsControllerTest do
 
   describe "checksum" do
     setup do
-      DigitsHandler.store([1, 2, 3])
+      DigitsHandler.store("123")
 
       :ok
     end

@@ -11,29 +11,25 @@ defmodule Bluecode.DigitsHandlerTest do
 
   describe "store" do
     test "store digits" do
-      assert DigitsHandler.store([0, 1, 2, 3, 9]) == {:ok, [0, 1, 2, 3, 9]}
+      assert DigitsHandler.store("01239") == {:ok, [0, 1, 2, 3, 9]}
     end
 
-    test "fail to store when input contains a binary" do
-      assert DigitsHandler.store([1, 2, "foo"]) == {:error, :invalid_input}
+    test "fail to store when input contains non-digit symbol" do
+      assert DigitsHandler.store("12foo") == {:error, :invalid_input}
     end
 
-    test "fail to store when input is not a list" do
-      assert DigitsHandler.store(1) == {:error, :invalid_input}
-    end
-
-    test "fail to store when input contains a number" do
-      assert DigitsHandler.store([1, 10]) == {:error, :invalid_input}
+    test "fail to store when input is a list" do
+      assert DigitsHandler.store(["1"]) == {:error, :invalid_input}
     end
 
     test "fail to store when input contains a float" do
-      assert DigitsHandler.store([1, 10.0]) == {:error, :invalid_input}
+      assert DigitsHandler.store("10.1") == {:error, :invalid_input}
     end
   end
 
   describe "clear" do
     setup do
-      DigitsHandler.store([1, 2])
+      DigitsHandler.store("12")
 
       :ok
     end
@@ -45,20 +41,20 @@ defmodule Bluecode.DigitsHandlerTest do
 
   describe "checksum" do
     test "calculte checksum" do
-      DigitsHandler.store([1, 2, 3])
+      DigitsHandler.store("123")
 
       assert DigitsHandler.checksum() == {:ok, 6}
     end
 
     test "calculate checksum with input from the readme" do
-      DigitsHandler.store([5, 4, 8, 9, 8, 5, 0, 3, 5, 4])
+      DigitsHandler.store("5489850354")
 
       assert DigitsHandler.checksum() == {:ok, 7}
     end
 
     test "calculte checksum after adding more digits" do
-      DigitsHandler.store([1, 2, 3])
-      DigitsHandler.store([1, 2, 2])
+      DigitsHandler.store("123")
+      DigitsHandler.store("122")
 
       assert DigitsHandler.checksum() == {:ok, 7}
     end

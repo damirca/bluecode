@@ -18,9 +18,11 @@ defmodule Bluecode.DigitsHandler do
     GenServer.call(:digits_handler, :checksum)
   end
 
-  def handle_call({:store, digits}, _from, state) when is_list(digits) do
-    if valid_input?(digits) do
-      new_state = List.flatten([state | digits])
+  def handle_call({:store, digits}, _from, state) when is_binary(digits) do
+    graphemes = String.graphemes(digits)
+
+    if Enum.all?(graphemes, &is_digit?/1) do
+      new_state = List.flatten([state | Enum.map(graphemes, &String.to_integer/1)])
 
       {:reply, {:ok, new_state}, new_state}
     else
@@ -89,12 +91,6 @@ defmodule Bluecode.DigitsHandler do
     else
       10 - remainder
     end
-  end
-
-  defp valid_input?(input) do
-    input
-    |> Stream.map(&to_string/1)
-    |> Enum.all?(&is_digit?/1)
   end
 
   # Detect a digit by its ascii code.
